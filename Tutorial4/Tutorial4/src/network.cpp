@@ -8,8 +8,8 @@
 #include "common.h"
 //#include "Tutorial4.h"
 
-char serverIP[32] = "127.0.0.1";
-//char serverIP[32] = "192.168.1.2";
+//char serverIP[32] = "127.0.0.1";
+char serverIP[32] = "192.168.1.2";
 
 //-----------------------------------------------------------------------------
 // Name: empty()
@@ -177,15 +177,17 @@ void CArmyWar::AddClient(int local, int ind, char *name)
 		list->index = ind;
 		strcpy(list->nickname, name);
 
+		clientList->next = NULL;
+
+		list->next = NULL;
+		prev->next = list;
+
 		if(clients % 2 == 0) 
 			createPlayer(ind);
 		else
 			createPlayer(ind);
 
-		clientList->next = NULL;
-
-		list->next = NULL;
-		prev->next = list;
+		
 	}
 
 	clients++;
@@ -430,20 +432,20 @@ void CArmyWar::ReadDeltaMoveCommand(dreamMessage *mes, clientData *client)
 
 		client->serverFrame.vel.x = mes->ReadFloat();
 		client->serverFrame.vel.y = mes->ReadFloat();
-/*
+
 		if(client == localClient)
 		{
 			CheckPredictionError(processedFrame);
 		}
-*/
-		//else
-		//{
+
+		else
+		{
 			client->command.origin.x = client->serverFrame.origin.x;
 			client->command.origin.y = client->serverFrame.origin.y;
 
 			client->command.vel.x = client->serverFrame.vel.x;
 			client->command.vel.y = client->serverFrame.vel.y;
-		//}
+		}
 	}
 
 	// Read time to run command
@@ -502,7 +504,7 @@ void CArmyWar::RunNetwork(int msec)
 	// Check that we haven't gone too far
 	if(current - ack > COMMAND_HISTORY_SIZE)
 		return;
-/*
+
 	// Predict the frames that we are waiting from the server
 	for(int a = ack + 1; a < current; a++)
 	{
@@ -511,6 +513,6 @@ void CArmyWar::RunNetwork(int msec)
 
 		PredictMovement(prevframe, frame);
 	}
-*/
+
 	MoveObjects();
 }

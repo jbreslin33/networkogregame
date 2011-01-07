@@ -4,20 +4,10 @@
 CArmyWar* game;
 bool keys[256];
 
-/* 
-//-------------------------------------------------------------------------------------
-CArmyWar::CArmyWar(void)
-{
-}
-//-------------------------------------------------------------------------------------
-CArmyWar::~CArmyWar(void)
-{
-}
-//-------------------------------------------------------------------------------------
-*/
+
 void CArmyWar::createPlayer(int index)
 {
-	Ogre::Entity* NinjaEntity = mSceneMgr->createEntity("Ninja", "ninja.mesh");
+	Ogre::Entity* NinjaEntity = mSceneMgr->createEntity("ninja.mesh");
 	//Ogre::Entity* ogreHead = mSceneMgr->createEntity("Head", "ogrehead.mesh");
 	Ogre::SceneNode* node = mSceneMgr->getRootSceneNode()->createChildSceneNode();
     node->attachObject(NinjaEntity);
@@ -89,7 +79,7 @@ bool CArmyWar::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	{
 		game->RunNetwork(evt.timeSinceLastFrame * 1000);
 		game->CheckKeys();
-		game->Frame();
+		//game->Frame();
 	}
  
     return ret;

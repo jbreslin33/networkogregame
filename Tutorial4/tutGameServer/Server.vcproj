@@ -73,7 +73,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib dreamSock.lib mysql++.lib"
+				AdditionalDependencies="winmm.lib odbc32.lib odbccp32.lib dreamSock.lib"
 				OutputFile="Server.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

@@ -45,54 +45,6 @@ CArmyWar::~CArmyWar()
 // Name: empty()
 // Desc: 
 //-----------------------------------------------------------------------------
-void CArmyWar::DrawMap(void)
-{
-/*
-	// Render players
-	clientData *list = clientList;
-
-	for( ; list != NULL; list = list->next)
-	{
-		if(list->team == RED_TEAM)
-		{
-			GFX_Blit(&redman, ((int) list->command.origin.x),
-				((int) list->command.origin.y),
-				32, 32, 0);
-		}
-
-		if(list->team == BLUE_TEAM)
-		{
-			GFX_Blit(&blueman, ((int) list->command.origin.x),
-				((int) list->command.origin.y),
-				32, 32, 0);
-		}
-
-	}
-	*/
-}
-
-//-----------------------------------------------------------------------------
-// Name: empty()
-// Desc: 
-//-----------------------------------------------------------------------------
-void CArmyWar::Frame(void)
-{
-	if(!localClient)
-		return;
-/*
-	// Draw map
-	GFX_Begin();
-	{
-		DrawMap();
-	}
-	GFX_End();
-*/
-}
-
-//-----------------------------------------------------------------------------
-// Name: empty()
-// Desc: 
-//-----------------------------------------------------------------------------
 void CArmyWar::Shutdown(void)
 {
 	Disconnect();
@@ -258,14 +210,14 @@ void CArmyWar::MoveObjects(void)
 
 	clientData *client = clientList;
 
+	Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+
 	for( ; client != NULL; client = client->next)
 	{
 		// Remote players
-		//if(client != localClient)
-		//{
+		if(client != localClient)
+		{
 			CalculateVelocity(&client->command, frametime);
-
-			Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
 
 			client->command.origin.x += client->command.vel.x;
 			client->command.origin.y += client->command.vel.y;
@@ -275,17 +227,22 @@ void CArmyWar::MoveObjects(void)
 
 			client->myNode->setPosition(transVector);
 
-    //mSceneMgr->getSceneNode("NinjaNode")->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 
-		//}
+		}
 
-		// Local player
-		//else
-		//{
-			//client->command.origin.x = client->command.predictedOrigin.x;
-			//client->command.origin.y = client->command.predictedOrigin.y;
+		//Local player
+		else
+		{
+			client->command.origin.x = client->command.predictedOrigin.x;
+			client->command.origin.y = client->command.predictedOrigin.y;
 
-		//}
+			transVector.x = client->command.origin.x;
+            transVector.y = client->command.origin.y;
+
+			client->myNode->setPosition(transVector);
+
+
+		}
 	}
 }
 
