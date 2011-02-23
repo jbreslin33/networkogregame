@@ -8,8 +8,8 @@
 #include "common.h"
 //#include "Tutorial4.h"
 
-//char serverIP[32] = "127.0.0.1";
-char serverIP[32] = "192.168.1.2";
+char serverIP[32] = "127.0.0.1";
+//char serverIP[32] = "192.168.1.2";
 
 //-----------------------------------------------------------------------------
 // Name: empty()
@@ -484,12 +484,16 @@ void CArmyWar::BuildDeltaMoveCommand(dreamMessage *mes, clientData *theClient)
 //-----------------------------------------------------------------------------
 void CArmyWar::RunNetwork(int msec)
 {
+    //MovePlayer();
+
 	static int time = 0;
 	time += msec;
 
 	// Framerate is too high
-	if(time < (1000 / 60))
+	if(time < (1000 / 60)) {
+        MovePlayer();
 		return;
+	}
 
 	frametime = time / 1000.0f;
 	time = 0;
@@ -515,4 +519,6 @@ void CArmyWar::RunNetwork(int msec)
 	}
 
 	MoveObjects();
+
+
 }

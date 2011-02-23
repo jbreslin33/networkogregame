@@ -75,10 +75,15 @@ bool CArmyWar::frameRenderingQueued(const Ogre::FrameEvent& evt)
  
     if(!processUnbufferedInput(evt)) return false;
 
+	
 	if(game != NULL)
 	{
-		game->RunNetwork(evt.timeSinceLastFrame * 1000);
 		game->CheckKeys();
+
+		game->RunNetwork(evt.timeSinceLastFrame * 1000);
+
+		rendertime = evt.timeSinceLastFrame;
+
 		//game->Frame();
 	}
  
@@ -107,6 +112,8 @@ extern "C" {
 
 		//game = new CArmyWar;
 	    game->StartConnection();
+
+		StartLogConsole();
 
  
         try {

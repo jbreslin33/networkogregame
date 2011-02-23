@@ -57,6 +57,7 @@ private:
 	void	CalculateVelocity(command_t *command, float frametime);
 	void	PredictMovement(int prevFrame, int curFrame);
 	void	MoveObjects(void);
+	void    MovePlayer(void);
 
 	void	AddClient(int local, int index, char *name);
 	void	RemoveClient(int index);
@@ -85,6 +86,7 @@ private:
 	clientData inputClient;			// Handles all keyboard input
 
 	float frametime;
+	float rendertime;
 
 	char gamename[32];
 	bool init;

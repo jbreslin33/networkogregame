@@ -25,6 +25,8 @@ CArmyWar::CArmyWar()
 
 	frametime		= 0.0f;
 
+	rendertime		= 0.0f;
+
 	init			= false;
 
 	gameIndex		= 0;
@@ -143,25 +145,32 @@ void CArmyWar::CalculateVelocity(command_t *command, float frametime)
 
 	command->vel.x = 0.0f;
 	command->vel.y = 0.0f;
+	//localClient->command.vel.x = 0.0f;
+	//localClient->command.vel.y = 0.0f;
+
 
 	if(command->key & KEY_UP)
 	{
 		command->vel.y += multiplier * frametime;
+		//localClient->command.vel.y += multiplier * frametime;
 	}
 
 	if(command->key & KEY_DOWN)
 	{
 		command->vel.y += -multiplier * frametime;
+		//localClient->command.vel.y += -multiplier * frametime;
 	}
 
 	if(command->key & KEY_LEFT)
 	{
 		command->vel.x += -multiplier * frametime;
+		//localClient->command.vel.x += -multiplier * frametime;
 	}
 
 	if(command->key & KEY_RIGHT)
 	{
 		command->vel.x += multiplier * frametime;
+		//localClient->command.vel.x += multiplier * frametime;
 	}
 }
 
@@ -197,6 +206,39 @@ void CArmyWar::PredictMovement(int prevFrame, int curFrame)
 	localClient->command.predictedOrigin.y	= localClient->frame[curFrame].predictedOrigin.y;
 	localClient->command.vel.x				= localClient->frame[curFrame].vel.x;
 	localClient->command.vel.y				= localClient->frame[curFrame].vel.y;
+}
+
+void CArmyWar::MovePlayer(void)
+{
+
+	static Ogre::Real mMove = 100;
+	Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+
+
+	if(keys[VK_DOWN])
+	{
+		transVector.y -= mMove;
+
+	}
+
+	if(keys[VK_UP])
+	{
+		transVector.y += mMove;
+	}
+
+	if(keys[VK_LEFT])
+	{
+		transVector.x -= mMove;
+	}
+
+	if(keys[VK_RIGHT])
+	{
+		transVector.x += mMove;
+	}
+
+	if(localClient)
+	   localClient->myNode->translate(transVector * rendertime, Ogre::Node::TS_LOCAL);
+
 }
 
 //-----------------------------------------------------------------------------
@@ -236,11 +278,26 @@ void CArmyWar::MoveObjects(void)
 			client->command.origin.x = client->command.predictedOrigin.x;
 			client->command.origin.y = client->command.predictedOrigin.y;
 
-			transVector.x = client->command.origin.x;
-            transVector.y = client->command.origin.y;
+			//memcpy(&client->command, &inputClient.command, sizeof(command_t));
+			//CalculateVelocity(&inputClient.command, frametime);
 
-			client->myNode->setPosition(transVector);
+			//client->command.origin.x += client->command.vel.x;
+			//client->command.origin.y += client->command.vel.y;
 
+            transVector.x = client->command.predictedOrigin.x;
+            transVector.y = client->command.predictedOrigin.y;
+
+			//transVector.x = client->command.vel.x;
+            //transVector.y = client->command.vel.y;
+
+			//client->myNode->translate(transVector, Ogre::Node::TS_LOCAL);
+            client->myNode->setPosition(transVector);
+
+
+            LogString("transVector.x %f: ", transVector.x);
+			LogString("transVector.y %f: ", transVector.y);
+			LogString("predictedOrigin.x %f: ", client->command.predictedOrigin.x);
+			LogString("predictedOrigin.y %f: ", client->command.predictedOrigin.y);
 
 		}
 	}
